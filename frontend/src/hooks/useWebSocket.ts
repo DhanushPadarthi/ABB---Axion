@@ -2,7 +2,11 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import type { FactoryState } from '../types';
 
-const WS_URL = 'ws://localhost:8000/ws';
+const _apiBase = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
+// In production (same-origin deploy) VITE_API_URL is empty — derive from window.location
+const WS_URL = _apiBase
+  ? _apiBase.replace(/^http/, 'ws') + '/ws'
+  : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`;
 const MAX_RETRIES = 8;
 const BASE_DELAY_MS = 500;
 
