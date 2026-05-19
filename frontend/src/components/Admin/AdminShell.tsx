@@ -77,7 +77,8 @@ export function ArchitectShell() {
   // Fetch backend machine configs on mount so Dependencies tab has API deps
   useEffect(() => {
     interface MinimalMachine { id: string; name: string; dependencies_downstream: { machine_id: string; impact_weight: number }[] }
-    const _apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
+    const _apiUrl = (import.meta.env.VITE_API_URL as string | undefined) || '';
+    if (!_apiUrl) return; // No backend in offline/Vercel mode
     fetch(`${_apiUrl}/api/config/machines`)
       .then((r) => r.json())
       .then((data: { machines: MinimalMachine[] }) => {

@@ -91,6 +91,13 @@ export function useCustomMachineSimulator() {
       }
       fetchingRef.current.add(m.id);
 
+      if (!API_BASE) {
+        // No backend in offline/Vercel mode — store empty profile
+        setProfile(m.id, {});
+        fetchingRef.current.delete(m.id);
+        return;
+      }
+
       fetch(`${API_BASE}/api/ai/suggest-profile`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

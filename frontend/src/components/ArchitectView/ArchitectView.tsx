@@ -830,7 +830,8 @@ function ArchitectViewInner() {
     if (fetchedRef.current) return;
     fetchedRef.current = true;
     setLoading(true);
-    const _apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
+    const _apiUrl = (import.meta.env.VITE_API_URL as string | undefined) || '';
+    if (!_apiUrl) { setLoading(false); return; } // No backend in offline/Vercel mode
     fetch(`${_apiUrl}/api/config/machines`)
       .then((r) => r.json())
       .then((data: { machines: MachineCfg[] }) => {
