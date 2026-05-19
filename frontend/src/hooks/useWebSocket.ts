@@ -2,11 +2,12 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/useAppStore';
 import type { FactoryState } from '../types';
 
-const _apiBase = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000';
-// In production (same-origin deploy) VITE_API_URL is empty — derive from window.location
+// VITE_API_URL is set to empty string in .env.production → no backend on Vercel
+const _apiBase = import.meta.env.VITE_API_URL as string | undefined;
+const WS_DISABLED = _apiBase === '' || _apiBase === undefined && import.meta.env.PROD;
 const WS_URL = _apiBase
   ? _apiBase.replace(/^http/, 'ws') + '/ws'
-  : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`;
+  : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://localhost:8000/ws`;
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 400;
 
@@ -20,6 +21,8 @@ export function useWebSocket() {
   const setFactoryState = useAppStore((s) => s.setFactoryState);
 
   const connect = useCallback(() => {
+    // No backend configured (Vercel / pure-frontend mode) — skip WS entirely.
+    if (WS_DISABLED) return;
     if (!mountedRef.current) return;
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
@@ -54,7 +57,7 @@ export function useWebSocket() {
   }, [setConnectionStatus, setFactoryState]);
 
   const scheduleReconnect = useCallback(() => {
-    if (retriesRef.current >= MAX_RETRIES) {
+    if (WS_DISABLED || retriesRef.current >= MAX_RETRIES) {
       setConnectionStatus('error');
       return;
     }
@@ -66,6 +69,8 @@ export function useWebSocket() {
   }, [connect, setConnectionStatus]);
 
   useEffect(() => {
+    // No backend configured — offline simulator handles data, nothing to do here.
+    if (WS_DISABLED) return;
     mountedRef.current = true;
     connect();
     return () => {
