@@ -7,8 +7,8 @@ const _apiBase = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http:/
 const WS_URL = _apiBase
   ? _apiBase.replace(/^http/, 'ws') + '/ws'
   : `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`;
-const MAX_RETRIES = 8;
-const BASE_DELAY_MS = 500;
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 400;
 
 export function useWebSocket() {
   const wsRef = useRef<WebSocket | null>(null);

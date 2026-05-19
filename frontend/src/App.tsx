@@ -4,6 +4,7 @@ import { useAppStore } from './store/useAppStore';
 import { useAuthStore } from './store/useAuthStore';
 import { useWebSocket } from './hooks/useWebSocket';
 import { useCustomMachineSimulator } from './hooks/useCustomMachineSimulator';
+import { useOfflineSimulator } from './hooks/useOfflineSimulator';
 import { LoginPage } from './components/Login/LoginPage';
 import { ArchitectShell } from './components/Admin/AdminShell';
 import { TopologyMap } from './components/TopologyMap/TopologyMap';
@@ -323,6 +324,8 @@ function Dashboard() {
 export default function App() {
   // Connect WebSocket at root level
   useWebSocket();
+  // Offline simulator: seeds real machine data immediately and ticks when no backend
+  useOfflineSimulator();
   // AI-driven live values for architect-added custom machines (no real datasource)
   useCustomMachineSimulator();
 
