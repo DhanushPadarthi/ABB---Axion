@@ -1,0 +1,396 @@
+{
+  "machines": [
+    {
+      "id": "cooling_unit",
+      "name": "Cooling Unit",
+      "type": "thermal_control",
+      "location": "Zone A - Utility Room",
+      "description": "Maintains the beverage liquid at precise temperature stability required for consistent fill quality. A rise in coolant temperature directly degrades fill accuracy in the downstream Filling Machine.",
+      "position": {
+        "x": 80,
+        "y": 300
+      },
+      "metrics": [
+        {
+          "key": "coolant_temperature",
+          "label": "Coolant Temp",
+          "unit": "\u00b0C",
+          "type": "line",
+          "normal_min": 8.0,
+          "normal_max": 18.0,
+          "warning_min": null,
+          "warning_max": 60.0,
+          "critical_min": null,
+          "critical_max": 90.0,
+          "base_value": 12.0,
+          "drift_rate": 0.3
+        },
+        {
+          "key": "cooling_efficiency",
+          "label": "Cooling Efficiency",
+          "unit": "%",
+          "type": "gauge",
+          "normal_min": 85.0,
+          "normal_max": 100.0,
+          "warning_min": 60.0,
+          "warning_max": null,
+          "critical_min": 40.0,
+          "critical_max": null,
+          "base_value": 96.0,
+          "drift_rate": 0.2
+        },
+        {
+          "key": "power_draw",
+          "label": "Power Draw",
+          "unit": "kW",
+          "type": "line",
+          "normal_min": 15.0,
+          "normal_max": 25.0,
+          "warning_min": null,
+          "warning_max": 35.0,
+          "critical_min": null,
+          "critical_max": 45.0,
+          "base_value": 20.0,
+          "drift_rate": 0.5
+        },
+        {
+          "key": "coolant_flow_rate",
+          "label": "Coolant Flow",
+          "unit": "L/min",
+          "type": "line",
+          "normal_min": 12.0,
+          "normal_max": 20.0,
+          "warning_min": 8.0,
+          "warning_max": null,
+          "critical_min": 4.0,
+          "critical_max": null,
+          "base_value": 16.0,
+          "drift_rate": 0.1
+        }
+      ],
+      "dependencies_downstream": [
+        {
+          "machine_id": "filling_machine",
+          "impact_weight": 0.8
+        }
+      ]
+    },
+    {
+      "id": "filling_machine",
+      "name": "Liquid Filling Machine",
+      "type": "filling",
+      "location": "Zone B - Production Line",
+      "description": "Controls high-precision filling of bottles with cooled liquid. Fill accuracy is highly sensitive to liquid temperature \u2014 even small temperature variations cause fill volume to deviate outside acceptable tolerances.",
+      "position": {
+        "x": 320,
+        "y": 300
+      },
+      "metrics": [
+        {
+          "key": "fill_accuracy",
+          "label": "Fill Accuracy",
+          "unit": "%",
+          "type": "gauge",
+          "normal_min": 95.0,
+          "normal_max": 100.0,
+          "warning_min": 88.0,
+          "warning_max": null,
+          "critical_min": 80.0,
+          "critical_max": null,
+          "base_value": 98.5,
+          "drift_rate": 0.1
+        },
+        {
+          "key": "liquid_pressure",
+          "label": "Liquid Pressure",
+          "unit": "bar",
+          "type": "line",
+          "normal_min": 3.0,
+          "normal_max": 5.5,
+          "warning_min": 2.0,
+          "warning_max": 6.5,
+          "critical_min": 1.5,
+          "critical_max": 7.5,
+          "base_value": 4.2,
+          "drift_rate": 0.05
+        },
+        {
+          "key": "throughput",
+          "label": "Throughput",
+          "unit": "btl/min",
+          "type": "line",
+          "normal_min": 280.0,
+          "normal_max": 320.0,
+          "warning_min": 220.0,
+          "warning_max": null,
+          "critical_min": 160.0,
+          "critical_max": null,
+          "base_value": 300.0,
+          "drift_rate": 1.0
+        },
+        {
+          "key": "fill_volume_variance",
+          "label": "Volume Variance",
+          "unit": "mL",
+          "type": "line",
+          "normal_min": 0.0,
+          "normal_max": 2.0,
+          "warning_min": null,
+          "warning_max": 5.0,
+          "critical_min": null,
+          "critical_max": 10.0,
+          "base_value": 0.8,
+          "drift_rate": 0.05
+        }
+      ],
+      "dependencies_downstream": [
+        {
+          "machine_id": "capping_system",
+          "impact_weight": 0.65
+        }
+      ]
+    },
+    {
+      "id": "capping_system",
+      "name": "Bottle Capping System",
+      "type": "capping",
+      "location": "Zone C - Production Line",
+      "description": "Seals each filled bottle with a cap. Depends on consistent throughput from the Filling Machine \u2014 if filling slows, the capping conveyor backs up, increasing motor load and vibration.",
+      "position": {
+        "x": 560,
+        "y": 300
+      },
+      "metrics": [
+        {
+          "key": "motor_speed",
+          "label": "Motor Speed",
+          "unit": "RPM",
+          "type": "line",
+          "normal_min": 1400.0,
+          "normal_max": 1600.0,
+          "warning_min": 1100.0,
+          "warning_max": 1800.0,
+          "critical_min": 800.0,
+          "critical_max": 2100.0,
+          "base_value": 1500.0,
+          "drift_rate": 5.0
+        },
+        {
+          "key": "vibration_level",
+          "label": "Vibration",
+          "unit": "mm/s",
+          "type": "line",
+          "normal_min": 0.0,
+          "normal_max": 3.5,
+          "warning_min": null,
+          "warning_max": 6.0,
+          "critical_min": null,
+          "critical_max": 9.0,
+          "base_value": 1.8,
+          "drift_rate": 0.05
+        },
+        {
+          "key": "cap_accuracy",
+          "label": "Cap Accuracy",
+          "unit": "%",
+          "type": "gauge",
+          "normal_min": 96.0,
+          "normal_max": 100.0,
+          "warning_min": 90.0,
+          "warning_max": null,
+          "critical_min": 83.0,
+          "critical_max": null,
+          "base_value": 98.8,
+          "drift_rate": 0.1
+        },
+        {
+          "key": "motor_temperature",
+          "label": "Motor Temp",
+          "unit": "\u00b0C",
+          "type": "line",
+          "normal_min": 40.0,
+          "normal_max": 70.0,
+          "warning_min": null,
+          "warning_max": 85.0,
+          "critical_min": null,
+          "critical_max": 100.0,
+          "base_value": 55.0,
+          "drift_rate": 0.3
+        }
+      ],
+      "dependencies_downstream": [
+        {
+          "machine_id": "packaging_conveyor",
+          "impact_weight": 0.5
+        }
+      ]
+    },
+    {
+      "id": "packaging_conveyor",
+      "name": "Packaging Conveyor",
+      "type": "conveyor",
+      "location": "Zone D - Transfer Line",
+      "description": "Moves capped bottles from the production area to the packaging station. Load-sensitive \u2014 persistent slowdowns from upstream increase motor temperature and reduce belt efficiency.",
+      "position": {
+        "x": 800,
+        "y": 300
+      },
+      "metrics": [
+        {
+          "key": "belt_speed",
+          "label": "Belt Speed",
+          "unit": "m/min",
+          "type": "line",
+          "normal_min": 18.0,
+          "normal_max": 24.0,
+          "warning_min": 12.0,
+          "warning_max": null,
+          "critical_min": 8.0,
+          "critical_max": null,
+          "base_value": 21.0,
+          "drift_rate": 0.2
+        },
+        {
+          "key": "motor_temperature",
+          "label": "Motor Temp",
+          "unit": "\u00b0C",
+          "type": "line",
+          "normal_min": 35.0,
+          "normal_max": 65.0,
+          "warning_min": null,
+          "warning_max": 78.0,
+          "critical_min": null,
+          "critical_max": 95.0,
+          "base_value": 48.0,
+          "drift_rate": 0.3
+        },
+        {
+          "key": "load",
+          "label": "Load",
+          "unit": "kg",
+          "type": "line",
+          "normal_min": 20.0,
+          "normal_max": 60.0,
+          "warning_min": 10.0,
+          "warning_max": 75.0,
+          "critical_min": 5.0,
+          "critical_max": 90.0,
+          "base_value": 38.0,
+          "drift_rate": 0.5
+        },
+        {
+          "key": "conveyor_throughput",
+          "label": "Throughput",
+          "unit": "btl/min",
+          "type": "line",
+          "normal_min": 260.0,
+          "normal_max": 320.0,
+          "warning_min": 200.0,
+          "warning_max": null,
+          "critical_min": 140.0,
+          "critical_max": null,
+          "base_value": 295.0,
+          "drift_rate": 1.0
+        }
+      ],
+      "dependencies_downstream": [
+        {
+          "machine_id": "storage_unit",
+          "impact_weight": 0.4
+        }
+      ]
+    },
+    {
+      "id": "storage_unit",
+      "name": "Storage Unit",
+      "type": "storage",
+      "location": "Zone E - Warehouse",
+      "description": "Receives packaged products and manages inventory intake. Storage capacity and intake efficiency depend on the rate of packaged goods arriving from the conveyor.",
+      "position": {
+        "x": 1040,
+        "y": 300
+      },
+      "metrics": [
+        {
+          "key": "capacity_used",
+          "label": "Capacity Used",
+          "unit": "%",
+          "type": "gauge",
+          "normal_min": 0.0,
+          "normal_max": 80.0,
+          "warning_min": null,
+          "warning_max": 90.0,
+          "critical_min": null,
+          "critical_max": 98.0,
+          "base_value": 42.0,
+          "drift_rate": 0.1
+        },
+        {
+          "key": "intake_rate",
+          "label": "Intake Rate",
+          "unit": "units/min",
+          "type": "line",
+          "normal_min": 250.0,
+          "normal_max": 320.0,
+          "warning_min": 190.0,
+          "warning_max": null,
+          "critical_min": 130.0,
+          "critical_max": null,
+          "base_value": 285.0,
+          "drift_rate": 1.0
+        },
+        {
+          "key": "storage_temperature",
+          "label": "Storage Temp",
+          "unit": "\u00b0C",
+          "type": "line",
+          "normal_min": 2.0,
+          "normal_max": 8.0,
+          "warning_min": null,
+          "warning_max": 12.0,
+          "critical_min": null,
+          "critical_max": 16.0,
+          "base_value": 5.0,
+          "drift_rate": 0.05
+        },
+        {
+          "key": "inventory_queue",
+          "label": "Queue Depth",
+          "unit": "units",
+          "type": "line",
+          "normal_min": 0.0,
+          "normal_max": 500.0,
+          "warning_min": null,
+          "warning_max": 800.0,
+          "critical_min": null,
+          "critical_max": 1200.0,
+          "base_value": 120.0,
+          "drift_rate": 2.0
+        }
+      ],
+      "dependencies_downstream": []
+    }
+  ],
+  "dependency_graph": [
+    {
+      "from": "cooling_unit",
+      "to": "filling_machine",
+      "impact_weight": 0.8
+    },
+    {
+      "from": "filling_machine",
+      "to": "capping_system",
+      "impact_weight": 0.65
+    },
+    {
+      "from": "capping_system",
+      "to": "packaging_conveyor",
+      "impact_weight": 0.5
+    },
+    {
+      "from": "packaging_conveyor",
+      "to": "storage_unit",
+      "impact_weight": 0.4
+    }
+  ]
+}

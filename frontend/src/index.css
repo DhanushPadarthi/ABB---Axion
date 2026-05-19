@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-dark: #0f1117;
+  --bg-card: #1a1f2e;
+  --bg-panel: #151926;
+  --border-dark: #2a3040;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent-blue: #3b82f6;
+  --healthy: #22c55e;
+  --warning: #f59e0b;
+  --critical: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  /* overflow: hidden is set per-page via .app-shell */
+}
+
+/* ─── Utility Component Classes ────────────────────────────── */
+@layer components {
+  .label-xs {
+    @apply block text-xs text-text-secondary uppercase tracking-wide font-semibold mb-1.5;
+  }
+
+  .axion-input {
+    @apply w-full bg-bg-dark border border-border-dark rounded-xl px-3 py-2 text-text-primary text-sm
+           placeholder:text-text-secondary/50
+           focus:outline-none focus:border-accent-blue/60 focus:ring-1 focus:ring-accent-blue/30
+           transition-all;
+  }
+
+  /* select elements need explicit appearance reset on Windows */
+  select.axion-input {
+    @apply appearance-none cursor-pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 2rem;
+  }
+
+  .axion-card {
+    @apply bg-bg-card border border-border-dark rounded-2xl;
+  }
+
+  .axion-badge {
+    @apply text-xs px-2 py-0.5 rounded-full font-semibold;
+  }
+}
+
+/* ─── React Flow ───────────────────────────────────────────── */
+.react-flow__node {
+  cursor: pointer !important;
+}
+
+.react-flow__attribution {
+  display: none !important;
+}
+
+/* Fix React Flow touch handling on mobile */
+.react-flow__pane {
+  touch-action: none;
+}
+
+/* ─── Safe area (iPhone notch) ─────────────────────────────── */
+nav.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ─── Scrollbars ────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a3040;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b4560;
+}
+
+/* ─── Login page: overflow allowed on that screen ──────────── */
+.login-scroll {
+  overflow-y: auto;
+}
