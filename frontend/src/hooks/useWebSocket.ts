@@ -70,7 +70,10 @@ export function useWebSocket() {
 
   useEffect(() => {
     // No backend configured — offline simulator handles data, nothing to do here.
-    if (WS_DISABLED) return;
+    if (WS_DISABLED) {
+      setConnectionStatus('disconnected');
+      return;
+    }
     mountedRef.current = true;
     connect();
     return () => {

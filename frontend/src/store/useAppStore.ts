@@ -40,7 +40,7 @@ interface AppStore {
 }
 
 export const useAppStore = create<AppStore>((set, get) => ({
-  connectionStatus: 'connecting',
+  connectionStatus: 'disconnected',
   setConnectionStatus: (s) => set({ connectionStatus: s }),
 
   factoryState: null,

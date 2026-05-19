@@ -831,7 +831,31 @@ function ArchitectViewInner() {
     fetchedRef.current = true;
     setLoading(true);
     const _apiUrl = (import.meta.env.VITE_API_URL as string | undefined) || '';
-    if (!_apiUrl) { setLoading(false); return; } // No backend in offline/Vercel mode
+    if (!_apiUrl) {
+      // No backend — build topology from offline simulator store state
+      const offlineMachines = Object.values(useAppStore.getState().machines);
+      const offlineConfigs: MachineCfg[] = offlineMachines.map((m) => ({
+        id: m.id,
+        name: m.name,
+        type: m.type,
+        location: m.location,
+        description: m.description,
+        position: m.position,
+        metrics: m.metrics.map((met) => ({
+          key: met.key,
+          label: met.label,
+          unit: met.unit,
+          normal_min: met.normal_min,
+          normal_max: met.normal_max,
+          warning_max: met.warning_max,
+          critical_max: met.critical_max,
+        })),
+        dependencies_downstream: m.dependencies_downstream,
+      }));
+      setConfigs(offlineConfigs);
+      setLoading(false);
+      return;
+    } // No backend in offline/Vercel mode
     fetch(`${_apiUrl}/api/config/machines`)
       .then((r) => r.json())
       .then((data: { machines: MachineCfg[] }) => {

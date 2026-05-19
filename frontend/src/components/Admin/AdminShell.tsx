@@ -186,8 +186,8 @@ export function ArchitectShell() {
         {/* User + Logout */}
         <div className="flex items-center gap-2">
           <div className="hidden sm:flex items-center gap-1.5 text-xs mr-1">
-            <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-healthy animate-pulse' : 'bg-warning animate-pulse'}`} />
-            <span className="text-text-secondary">{connectionStatus === 'connected' ? 'Live' : 'Connecting...'}</span>
+            <span className={`w-1.5 h-1.5 rounded-full ${connectionStatus === 'connected' ? 'bg-healthy animate-pulse' : connectionStatus === 'disconnected' ? 'bg-text-secondary' : 'bg-warning animate-pulse'}`} />
+            <span className="text-text-secondary">{connectionStatus === 'connected' ? 'Live' : connectionStatus === 'disconnected' ? 'Offline' : 'Connecting...'}</span>
           </div>
           <div className="hidden sm:flex items-center gap-1.5 text-xs text-text-secondary">
             <span>{currentUser?.avatar}</span>
