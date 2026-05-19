@@ -2,3 +2,5 @@
 /backend
 /requirements.txt
 /.python-version
+node_modules
+frontend/node_modules
